@@ -1,8 +1,8 @@
 import type { Route } from "./+types/home";
 import { Link } from "react-router";
 
-import { CreateRoomButton } from "~/features/CreateRoomButton";
-import { JoinRoomForm } from "~/features/JoinRoomForm";
+import { CreateRoomButton } from "~/features/room/CreateRoomButton";
+import { JoinRoomForm } from "~/features/room/JoinRoomForm";
 
 export function meta({}: Route.MetaArgs) {
   return [
