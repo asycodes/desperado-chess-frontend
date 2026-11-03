@@ -31,6 +31,11 @@ export default function Home(){
 
         <JoinRoomForm/>
 
+        <footer className="mt-auto flex justify-between text-sm">
+          <Link to="/history" className="text-gold hover:underline">My match history</Link>
+          <Link to="/how-to-play" className="text-gold hover:underline">How to play</Link>
+        </footer>
+
       </div>
     </main>
 
