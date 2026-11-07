@@ -1,30 +1,46 @@
 import { useState, type SubmitEvent } from "react";
 import { useNavigate } from "react-router";
+import { useJoinRoomMutation } from "./roomAPI";
+import { useAppDispatch } from "~/store/hooks";
+import { getErrorMessage } from "~/lib/errors";
+import { joinedRoom } from "../session/sessionSlice";
 
 const CODE_PATTERN = /^[A-Z]{4}$/;
 const MAX_NICKNAME = 16;
 
+type Props = { name: string; initialCode?: string };
 
 
-export function JoinRoomForm(){
+
+export function JoinRoomForm({ name,initialCode="" }: Props){
     const navigate = useNavigate();
-    const [code, setCode] = useState("");
-    const [nickname,setNickname] = useState("");
+    const [code, setCode] = useState(initialCode);
     const [error,setError] = useState<string | null>(null);
-    function handleSubmit(event: SubmitEvent<HTMLFormElement>){
+    const dispatch = useAppDispatch();
+    const [joinRoom, { isLoading }] = useJoinRoomMutation();
+
+
+
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>){
         event.preventDefault();
-        const name = nickname.trim();
+        const nickname = name.trim();
         if (!CODE_PATTERN.test(code)){
             setError("Room Code is 4 letters such as ABCD");
             return;
         }
-        if (name.length > MAX_NICKNAME || name.length ==0){
-            setError("Name length must be between 1-${MAX_NICKNAME} characters");
+        if (nickname.length > MAX_NICKNAME || nickname.length ==0){
+            setError(`Name length must be between 1-${MAX_NICKNAME} characters`);
             return;
         }
         setError(null);
-        // TODO: call the join-room API, store nickname + token in sessionSlice.
-        navigate(`/room/${code}`)
+        try {
+            const result = await joinRoom({ code, nickname: name }).unwrap();
+            dispatch(joinedRoom({ code: result.code, playerId: result.playerId, nickname: name }));
+            navigate(`/room/${result.code}`);
+        } 
+        catch (err) {
+            setError(getErrorMessage(err));
+        }
     }
 
     return(
@@ -34,15 +50,9 @@ export function JoinRoomForm(){
                 <input id="room-code" value = {code} onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0,4))}
                 autoComplete="off" autoCapitalize="characters" inputMode="text" className="h-14 rounded-xl border border-line bg-ground text-center font-mono text-3xl font-bold tracking-[0.4em] outline-none focus:border-accebt"/>
             </div>
-
-            <div className= "flex flex-col gap-2">
-                <label htmlFor="nickname" className="text-sm font-semibold">Nickname</label>
-                <input id="nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={MAX_NICKNAME} placeholder="eg Marcus" className="h-12 rounded-xl border border-border bg-bg px-4 outline-none focus:border-accent"/>
-            </div>
-
+            <button type="submit" disabled={isLoading} className="h-13 rounded-xl border border-ink font-semibold transition hover:bg-ink hover:text-bg">
+                {isLoading ? "Joining…" : "Join room"}</button>
             {error && (<p role="alert" className="text-sm text-red-300">{error}</p>)}
-            <button type="submit" className="h-13 rounded-xl border border-ink font-semibold transition hover:bg-ink hover:text-bg">
-                Join room</button>
         </form>
     )
 

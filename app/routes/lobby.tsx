@@ -1,19 +1,17 @@
 import type { Route } from "./+types/lobby";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 
 import { RoomCodeCard } from "~/features/lobby/RoomCodeCard";
 import { PlayerList } from "~/features/lobby/PlayerList";
 import type { GameMode, Player } from "~/types";
 
-const MIN_PLAYERS = 2;
-const CURRENT_PLAYER_ID = "p1"; // TODO: comes from sessionSlice once joining is real
 
-const PLACEHOLDER_PLAYERS: Player[] = [
-  { id: "p1", nickname: "Asyraf", color: "#F28C38", isHost: true },
-  { id: "p2", nickname: "Mei Ling", color: "#5AA9FF", isHost: false },
-  { id: "p3", nickname: "Ravi", color: "#E66AA8", isHost: false },
-];
+import { useGetRoomQuery } from "~/features/room/roomAPI";
+import { useAppSelector } from "~/store/hooks";
+
+const MIN_PLAYERS = 2;
+
 
 const MODES: { id: GameMode; label: string; description: string }[] = [
   { id: "FFA", label: "Free-for-All", description: "Most points wins" },
@@ -23,12 +21,37 @@ const MODES: { id: GameMode; label: string; description: string }[] = [
 export default function Lobby({ params }: Route.ComponentProps) {
   const navigate = useNavigate();
   const [mode, setMode] = useState<GameMode>("FFA");
+  const playerId = useAppSelector((state) => state.session.playerId);
 
-  const players = PLACEHOLDER_PLAYERS;
-  const me = players.find((p) => p.id === CURRENT_PLAYER_ID);
+  const session = useAppSelector((s) => s.session);
+  const { data: room, isLoading, isError } = useGetRoomQuery(params.code, {
+    pollingInterval: 2000, // stopgap until WebSocket updates
+  });
+
+  if (isLoading) {
+    return <main className="min-h-screen bg-bg p-6 text-main">Loading room…</main>;
+  }
+  if (isError || !room) {
+    return (
+      <main className="min-h-screen bg-bg p-6 text-main">
+        <p>Room not found.</p>
+        <Link to="/" className="text-accent">Back to home</Link>
+      </main>
+    );
+  }
+
+
+
+  const players = room.players;
+  const isInThisRoom = session.code === room.code && session.playerId !== null;
+  const me = players.find((p) => p.id === session.playerId);
   const isHost = me?.isHost ?? false;
   const hasEnoughPlayers = players.length >= MIN_PLAYERS;
   const canStart = isHost && hasEnoughPlayers;
+
+  if (!isInThisRoom) {
+    return <Navigate to={`/?code=${room.code}`} replace />;
+  }
 
   function handleStart() {
     if (!canStart) return;
@@ -79,7 +102,7 @@ export default function Lobby({ params }: Route.ComponentProps) {
             </div>
         </section>
 
-        <PlayerList players={players} currentPlayerId={CURRENT_PLAYER_ID} />
+        <PlayerList players={players} currentPlayerId={playerId} />
 
         <div className="mt-auto flex flex-col gap-2">
           {isHost ? (
