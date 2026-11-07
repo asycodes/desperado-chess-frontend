@@ -3,6 +3,8 @@ import { Link } from "react-router";
 
 import { CreateRoomButton } from "~/features/room/CreateRoomButton";
 import { JoinRoomForm } from "~/features/room/JoinRoomForm";
+import { useState } from "react";
+import { useSearchParams } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,7 +13,14 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+const MAX_NICKNAME = 16;
+
+
 export default function Home(){
+  const [nickname,setNickname] = useState("");
+  const [searchParams] = useSearchParams();
+  const invitedCode = searchParams.get("code")?.toUpperCase() ?? "";
+  
   return(
     <main className="min-h-screen bg-bg text-main">
       <div className="mx-auto flex min-h-screen max-w-md flex-col gap-7 px-6 pb-8 pt-14">
@@ -21,7 +30,12 @@ export default function Home(){
           <p className="text-secondary">Capture as many points as possible across all the chessboards</p>
         </header>
 
-        <CreateRoomButton/>
+        <div className= "flex flex-col gap-2">
+          <label htmlFor="nickname" className="text-sm font-semibold">Nickname</label>
+          <input id="nickname" autoFocus={invitedCode !== ""} value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={MAX_NICKNAME} placeholder="eg Marcus" className="h-12 rounded-xl border border-border bg-bg px-4 outline-none focus:border-accent"/>
+        </div>
+
+        <CreateRoomButton name = {nickname}/>
 
         <div className="flex items-center gap-3 text-sm text-secondary">
           <div className="h-px flex-1 bg-line"/>
@@ -29,7 +43,7 @@ export default function Home(){
           <div className="h-px flex-1 bg-line"/>
         </div>
 
-        <JoinRoomForm/>
+        <JoinRoomForm name = {nickname} initialCode={invitedCode}/>
 
         <footer className="mt-auto flex justify-between text-sm">
           <Link to="/history" className="text-gold hover:underline">My match history</Link>
