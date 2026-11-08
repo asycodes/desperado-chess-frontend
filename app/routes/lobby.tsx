@@ -5,9 +5,9 @@ import { Link, Navigate, useNavigate } from "react-router";
 import { RoomCodeCard } from "~/features/lobby/RoomCodeCard";
 import { PlayerList } from "~/features/lobby/PlayerList";
 import type { GameMode, Player } from "~/types";
+import { getErrorMessage } from "~/lib/errors";
 
-
-import { useGetRoomQuery } from "~/features/room/roomAPI";
+import { useGetRoomQuery, useAddBotMutation } from "~/features/room/roomAPI";
 import { useAppSelector } from "~/store/hooks";
 
 const MIN_PLAYERS = 2;
@@ -22,6 +22,8 @@ export default function Lobby({ params }: Route.ComponentProps) {
   const navigate = useNavigate();
   const [mode, setMode] = useState<GameMode>("FFA");
   const playerId = useAppSelector((state) => state.session.playerId);
+  const [addBot, { isLoading: isAddingBot }] = useAddBotMutation();
+  const [botError, setBotError] = useState<string | null>(null);
 
   const session = useAppSelector((s) => s.session);
   const { data: room, isLoading, isError } = useGetRoomQuery(params.code, {
@@ -59,6 +61,16 @@ export default function Lobby({ params }: Route.ComponentProps) {
     // The server will broadcast MATCH_STARTED and every player navigates then.
     navigate(`/room/${params.code}/match`);
   }
+  const roomCode = room.code;
+  async function handleAddBot() {
+    if (session.playerId === null) return;
+    setBotError(null);
+    try {
+      await addBot({ code: roomCode, requesterId: session.playerId }).unwrap();
+    } catch (err) {
+      setBotError(getErrorMessage(err));
+    }
+  }
 
   return (
     <main className="min-h-screen bg-bg text-main">
@@ -77,7 +89,7 @@ export default function Lobby({ params }: Route.ComponentProps) {
           {isHost && <span className="text-secondary">You are the host</span>}
         </div>
 
-        <RoomCodeCard code={params.code} />
+        <RoomCodeCard code={room.code} />
 
         <section className="flex flex-col gap-3">
             <h2 className="text-sm font-bold">Mode</h2>
@@ -102,7 +114,8 @@ export default function Lobby({ params }: Route.ComponentProps) {
             </div>
         </section>
 
-        <PlayerList players={players} currentPlayerId={playerId} />
+        <PlayerList players={players} currentPlayerId={session.playerId} onAddBot={isHost ? handleAddBot : undefined} isAddingBot={isAddingBot}/>
+        {botError && <p role="alert" className="text-sm text-red-300">{botError}</p>}
 
         <div className="mt-auto flex flex-col gap-2">
           {isHost ? (

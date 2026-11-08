@@ -1,5 +1,5 @@
 import { api } from "~/lib/api";
-import type { JoinRoomResponse, NicknameRequest, RoomResponse } from "~/types/api";
+import type { JoinRoomResponse, NicknameRequest, RoomResponse, PlayerResponse } from "~/types/api";
 
 export const roomApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -18,7 +18,15 @@ export const roomApi = api.injectEndpoints({
       query: (code) => `/rooms/${code}`,
       providesTags: (_result, _error, code) => [{ type: "Room", id: code }],
     }),
+    addBot: build.mutation<PlayerResponse, { code: string; requesterId: number }>({
+        query: ({ code, requesterId }) => ({
+            url: `/rooms/${code}/bots`,
+            method: "POST",
+            body: { requesterId },
+        }),
+        invalidatesTags: (_result, _error, { code }) => [{ type: "Room", id: code }],
+    })
   }),
 });
 
-export const { useCreateRoomMutation, useJoinRoomMutation, useGetRoomQuery } = roomApi;
+export const { useCreateRoomMutation, useJoinRoomMutation, useGetRoomQuery, useAddBotMutation } = roomApi;

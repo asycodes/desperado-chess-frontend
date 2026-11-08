@@ -5,6 +5,7 @@ export type PlayerResponse = {
   nickname: string;
   position: number;
   isHost: boolean;
+  isBot: boolean;
 };
 
 export type RoomResponse = {
