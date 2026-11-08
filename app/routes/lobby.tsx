@@ -7,7 +7,7 @@ import { PlayerList } from "~/features/lobby/PlayerList";
 import type { GameMode, Player } from "~/types";
 import { getErrorMessage } from "~/lib/errors";
 
-import { useGetRoomQuery, useAddBotMutation } from "~/features/room/roomAPI";
+import { useGetRoomQuery, useAddBotMutation, useStartMatchMutation } from "~/features/room/roomAPI";
 import { useAppSelector } from "~/store/hooks";
 
 const MIN_PLAYERS = 2;
@@ -24,11 +24,12 @@ export default function Lobby({ params }: Route.ComponentProps) {
   const playerId = useAppSelector((state) => state.session.playerId);
   const [addBot, { isLoading: isAddingBot }] = useAddBotMutation();
   const [botError, setBotError] = useState<string | null>(null);
+  const [startMatch, { isLoading: isStarting }] = useStartMatchMutation();
 
   const session = useAppSelector((s) => s.session);
-  const { data: room, isLoading, isError } = useGetRoomQuery(params.code, {
-    pollingInterval: 2000, // stopgap until WebSocket updates
-  });
+  const { data: room, isLoading, isError } = useGetRoomQuery(params.code)
+
+
 
   if (isLoading) {
     return <main className="min-h-screen bg-bg p-6 text-main">Loading room…</main>;
@@ -42,26 +43,29 @@ export default function Lobby({ params }: Route.ComponentProps) {
     );
   }
 
-
-
-  const players = room.players;
   const isInThisRoom = session.code === room.code && session.playerId !== null;
+
+  if (!isInThisRoom) {
+    return <Navigate to={`/?code=${room.code}`} replace />;
+  }
+  if (room.active) {
+    return <Navigate to={`/room/${room.code}/match`} replace />;
+  }
+  const players = room.players;
   const me = players.find((p) => p.id === session.playerId);
   const isHost = me?.isHost ?? false;
   const hasEnoughPlayers = players.length >= MIN_PLAYERS;
   const canStart = isHost && hasEnoughPlayers;
 
-  if (!isInThisRoom) {
-    return <Navigate to={`/?code=${room.code}`} replace />;
-  }
-
-  function handleStart() {
-    if (!canStart) return;
-    // TODO: send "start match" with the chosen mode to the server over WebSocket.
-    // The server will broadcast MATCH_STARTED and every player navigates then.
-    navigate(`/room/${params.code}/match`);
-  }
-  const roomCode = room.code;
+  const handleStart = async () => {
+    if (!canStart || session.playerId === null) return;
+    try {
+      await startMatch({ code: room.code, requesterId: session.playerId, mode }).unwrap();
+    } catch (err) {
+      setBotError(getErrorMessage(err));
+    }
+  };
+  const roomCode = room.code
   async function handleAddBot() {
     if (session.playerId === null) return;
     setBotError(null);

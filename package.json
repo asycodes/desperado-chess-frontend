@@ -12,6 +12,7 @@
     "@react-router/node": "^8.5.1",
     "@react-router/serve": "^8.5.1",
     "@reduxjs/toolkit": "^2.14.0",
+    "@stomp/stompjs": "^7.5.0",
     "isbot": "^5.1.36",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
