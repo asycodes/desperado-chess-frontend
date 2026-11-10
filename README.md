@@ -2,8 +2,8 @@
 
 A party chess web app. Everyone in the room plays everyone else at the same time, on separate boards, for 10 minutes. Captures score points, checkmates score a bonus, and the current leader is worth double.
 
-**Live demo:** https://YOUR-APP.vercel.app *(the backend runs on a free tier and sleeps when idle, so the first load can take about a minute)*
-**Backend repo:** https://github.com/YOUR-USERNAME/desperado-backend
+**Live demo:** (to be deployed ASAP)
+**Backend repo:** https://github.com/asycodes/desperado-chess-backend
 
 <p align="center">
   <img src="docs/screenshots/04-match-bounty.png" alt="Match in progress: Bot 2 leads with the ×2 bounty, and it's your move on the board against Bot 2" width="320">
