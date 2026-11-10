@@ -6,17 +6,17 @@ A party chess web app. Everyone in the room plays everyone else at the same time
 **Backend repo:** https://github.com/asycodes/desperado-chess-backend
 
 <p align="center">
-  <img src="docs/screenshots/04-match-bounty.png" alt="Match in progress: Bot 2 leads with the ×2 bounty, and it's your move on the board against Bot 2" width="320">
+  <img src="docs\screenshots\match2.png" alt="homescreen" width="320">
 </p>
 
 ---
 
 ## Screenshots
 
-| Home | Lobby | Match start | Mid-match |
+| Home | Lobby | Match start |
 |:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/01-home.png" alt="Home screen with the pixel knight logo, name input, create room and join by code" width="200"> | <img src="docs/screenshots/02-lobby.png" alt="Lobby with room code HSGG, mode picker and four players including two bots" width="200"> | <img src="docs/screenshots/03-match-start.png" alt="Start of a match: scoreboard, board tabs and the first board, waiting for the opponent" width="200"> | <img src="docs/screenshots/04-match-bounty.png" alt="Mid-match: Bot 2 leads with the ×2 bounty badge, legal moves shown on the board" width="200"> |
-| Enter a name, then create a room or join with a 4-letter code | Share the code, fill empty seats with bots, choose the mode | One board per opponent; tabs mark boards waiting for your move | The leader's card is inverted with a ×2 bounty badge; dots and corner brackets show legal moves and captures |
+| <img src="docs/screenshots/home.png" alt="Home screen with the pixel knight logo, name input, create room and join by code" width="200"> | <img src="docs/screenshots/lobby.png" alt="Lobby with room code HSGG, mode picker and four players including two bots" width="200"> | <img src="docs/screenshots/match.png" alt="Start of a match: scoreboard, board tabs and the first board, waiting for the opponent" width="200"> | 
+| Enter a name, then create a room or join with a 4-letter code | Share the code, fill empty seats with bots, choose the mode | One board per opponent; tabs mark boards waiting for your move |
 
 ---
 
