@@ -6,7 +6,7 @@ A party chess web app. Everyone in the room plays everyone else at the same time
 **Backend repo:** https://github.com/asycodes/desperado-chess-backend
 
 <p align="center">
-  <img src="docs\screenshots\match2.png" alt="homescreen" width="320">
+  <img src="docs\screenshots\match2.png" alt="mid match" width="320">
 </p>
 
 ---
@@ -15,7 +15,7 @@ A party chess web app. Everyone in the room plays everyone else at the same time
 
 | Home | Lobby | Match start |
 |:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/home.png" alt="Home screen with the pixel knight logo, name input, create room and join by code" width="200"> | <img src="docs/screenshots/lobby.png" alt="Lobby with room code HSGG, mode picker and four players including two bots" width="200"> | <img src="docs/screenshots/match.png" alt="Start of a match: scoreboard, board tabs and the first board, waiting for the opponent" width="200"> | 
+| <img src="docs/screenshots/homescreen.png" alt="Home screen with the pixel knight logo, name input, create room and join by code" width="200"> | <img src="docs/screenshots/lobby.png" alt="Lobby with room code HSGG, mode picker and four players including two bots" width="200"> | <img src="docs/screenshots/match.png" alt="Start of a match: scoreboard, board tabs and the first board, waiting for the opponent" width="200"> | 
 | Enter a name, then create a room or join with a 4-letter code | Share the code, fill empty seats with bots, choose the mode | One board per opponent; tabs mark boards waiting for your move |
 
 ---
