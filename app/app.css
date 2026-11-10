@@ -1,12 +1,71 @@
 @import "tailwindcss";
 
+:root {
+  --ink: #0d0d0b;
+  --egg: #f0ead6;
+  --bg: var(--ink);
+  --main: var(--egg);
+  --card: var(--ink);
+  --border: var(--egg);
+  --secondary: #cfc8b3;
+  --accent: var(--egg);
+  --shadow: #6b675c;
+}
+
+.paper {
+  --bg: var(--egg);
+  --main: var(--ink);
+  --card: var(--egg);
+  --border: var(--ink);
+  --secondary: #4a473f;
+  --accent: var(--ink);
+  --shadow: #9e9884;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-main: var(--main);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-egg: var(--egg);
+
+  --font-pixel: "Silkscreen", monospace;
+  --font-mono: "Space Mono", monospace;
+}
+
 @theme {
-  --color-bg: #0E1411; /* ground */
-  --color-card: #17201B; /* surface */
-  --color-border: #26332C; /* line */
-  --color-main: #EDEFE9; /*ink*/
-  --color-secondary: #A3AEA7;  /*muted*/
-  --color-accent: #F2B33D; /*gold*/
-  --font-display:"Bricolage Grotesque", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --radius-*: initial;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--main);
+  font-family: var(--font-mono);
+}
+
+@utility pixel-shadow {
+  box-shadow: 4px 4px 0 var(--shadow);
+}
+@utility pixel-shadow-sm {
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+@utility dither {
+  background-image: radial-gradient(var(--main) 0.9px, transparent 1.1px);
+  background-size: 3px 3px;
+}
+@utility text-pixel-shadow {
+  text-shadow: 4px 4px 0 var(--shadow);
+}
+
+@utility dither-bg {
+  background-image: radial-gradient(var(--secondary) 0.6px, transparent 0.9px);
+  background-size: 4px 4px;
+}
+
+@utility dither-ink {
+  background-image: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 4px);
 }

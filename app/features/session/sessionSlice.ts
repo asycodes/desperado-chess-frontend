@@ -10,7 +10,7 @@ const STORAGE_KEY = "desperado.session";
 const emptySession: SessionState = { code: null, playerId: null, nickname: null };
 
 function loadSession(): SessionState {
-  if (typeof window === "undefined") return emptySession; // build-time render safety
+  if (typeof window === "undefined") return emptySession;
   try {
     const raw = window.sessionStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as SessionState) : emptySession;
