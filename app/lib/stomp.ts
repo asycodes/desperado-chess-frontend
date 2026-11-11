@@ -1,8 +1,9 @@
 import { Client } from "@stomp/stompjs";
 
 const WS_URL =
-  import.meta.env.VITE_WS_URL ?? import.meta.env.VITE_API_URL.replace(/^http/, "ws") + "/ws";
+  import.meta.env.VITE_WS_URL || import.meta.env.VITE_API_URL.replace(/^http/, "ws") + "/ws";
 
+if (!WS_URL) throw new Error("WebSocket URL is not configured: set VITE_API_URL");
 /** Subscribes to a STOMP topic and returns a function that disconnects. */
 export function subscribeToTopic(topic: string, onMessage: (body: unknown) => void): () => void {
     const client = new Client({
