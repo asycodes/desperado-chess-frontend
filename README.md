@@ -4,7 +4,7 @@ Free-Fall-All chess, where everyone plays against one another at the same time, 
 
 Play on the phone or desktop!
 
-**Live demo:** [Live Link](https://desperado-chess-frontend.vercel.app/)<br>
+**Live demo:** [Live Link](https://desperado-chess-frontend.vercel.app/) (do expect 1-2 minutes for the backend to re-initialize as its deployed to a free tier instance)<br>
 **Backend repo:** https://github.com/asycodes/desperado-chess-backend
 
 <p align="center">
