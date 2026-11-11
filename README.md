@@ -1,8 +1,8 @@
-# Desperado Chess — Frontend
+# Desperado Chess, party-style multiplayer live chess game (1 vs 1 vs 1 vs 1)
 
-A party chess web app. Everyone in the room plays everyone else at the same time, on separate boards, for 10 minutes. Captures score points, checkmates score a bonus, and the current leader is worth double.
+Free-Fall-All chess, where everyone plays against one another at the same time, capturing each others' pieces to accumulate points. Highest points incur the leader title where their pieces are worth twice as much (to make differences in chess elos more balanced). If you are short of players, you can add bots into the party (the bots are very very very bad. for now.)
 
-**Live demo:** to be deployed<br>
+**Live demo:** [Live Link](https://desperado-chess-frontend.vercel.app/)<br>
 **Backend repo:** https://github.com/asycodes/desperado-chess-backend
 
 <p align="center">
