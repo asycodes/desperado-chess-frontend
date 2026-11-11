@@ -1,4 +1,4 @@
-# Desperado Chess, multiplayer live chess game
+# Desperado Chess, party-style live chess game
 
 Free-Fall-All chess, where everyone plays against one another at the same time, capturing each others' pieces to accumulate points. Highest points incur the leader title where their pieces are worth twice as much (to make differences in chess elos more balanced). If you are short of players, you can add bots into the party (the bots are very very very bad. for now.)
 
